@@ -71,10 +71,12 @@ class MainActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener,
 
     override fun onDialogTimeSet(tag: String?, hourOfDay: Int, minute: Int) {
         val calendar = Calendar.getInstance()
-        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
-        calendar.set(Calendar.MINUTE, minute)
+        calendar.apply {
+            set(Calendar.HOUR_OF_DAY, hourOfDay)
+            set(Calendar.MINUTE, minute)
+        }
 
-        val dateFormat = SimpleDateFormat("HH::mm", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
         when (tag) {
             TIME_PICKER_REPEAT_TAG -> {}
@@ -101,9 +103,9 @@ class MainActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener,
         }
 
         buttonSetOnceAlarm.setOnClickListener {
-            val onceDate = findViewById<Button>(R.id.btn_once_date).text.toString()
-            val onceTime = findViewById<Button>(R.id.btn_once_time).text.toString()
-            val onceMessage = findViewById<Button>(R.id.edt_once_message).text.toString()
+            val onceDate = findViewById<TextView>(R.id.tv_once_date).text.toString()
+            val onceTime = findViewById<TextView>(R.id.tv_once_time).text.toString()
+            val onceMessage = findViewById<TextView>(R.id.edt_once_message).text.toString()
 
             alarmReceiver.setOneTimeAlarm(
                 this,

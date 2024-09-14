@@ -16,14 +16,13 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mListener = context as DialogTimeListener?
+        mListener = context as? DialogTimeListener
     }
 
     override fun onDetach() {
         super.onDetach()
-        if (mListener != null) {
-            mListener = null
-        }
+        mListener = null
+
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

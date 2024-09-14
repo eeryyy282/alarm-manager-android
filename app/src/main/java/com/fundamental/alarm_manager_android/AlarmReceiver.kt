@@ -52,13 +52,14 @@ class AlarmReceiver : BroadcastReceiver() {
         val dateArray = date.split("-").toTypedArray()
         val timeArray = time.split(":").toTypedArray()
 
-        val calendar = Calendar.getInstance()
-        calendar.set(Calendar.YEAR, Integer.parseInt(dateArray[0]))
-        calendar.set(Calendar.MONTH, Integer.parseInt(dateArray[1]) - 1)
-        calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateArray[2]))
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArray[0]))
-        calendar.set(Calendar.MINUTE, Integer.parseInt(timeArray[1]))
-        calendar.set(Calendar.SECOND, 0)
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.YEAR, dateArray[0].toInt())
+            set(Calendar.MONTH, dateArray[1].toInt() - 1)
+            set(Calendar.DAY_OF_MONTH, dateArray[2].toInt())
+            set(Calendar.HOUR_OF_DAY, timeArray[0].toInt())
+            set(Calendar.MINUTE, timeArray[1].toInt())
+            set(Calendar.SECOND, 0)
+        }
 
         val pendingIntent =
             PendingIntent.getBroadcast(context, ID_ONETIME, intent, PendingIntent.FLAG_IMMUTABLE)
@@ -85,6 +86,7 @@ class AlarmReceiver : BroadcastReceiver() {
     ) {
         val chanelId = "Chanel_1"
         val channelName = "AlarmManager channel"
+        val vibrationPattern = longArrayOf(1000, 1000, 1000, 1000, 1000)
 
         val notificationManagerCompat =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -94,7 +96,7 @@ class AlarmReceiver : BroadcastReceiver() {
             .setContentTitle(title)
             .setContentText(message)
             .setColor(ContextCompat.getColor(context, android.R.color.transparent))
-            .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
+            .setVibrate(vibrationPattern)
             .setSound(alarmSound)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -102,10 +104,9 @@ class AlarmReceiver : BroadcastReceiver() {
                 NotificationChannel(chanelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
 
             chanel.enableVibration(true)
-            chanel.vibrationPattern = longArrayOf(1000, 1000, 1000, 1000, 1000)
+            chanel.vibrationPattern = vibrationPattern
 
             builder.setChannelId(chanelId)
-
             notificationManagerCompat.createNotificationChannel(chanel)
         }
 
